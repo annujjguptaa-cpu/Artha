@@ -1,0 +1,21 @@
+{
+  "short_name": "Artha",
+  "name": "Artha — Grocery Price-Comparison & Auto-Cart",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0f172a",
+  "theme_color": "#00A896",
+  "display": "standalone",
+  "orientation": "portrait"
+}

@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+celery
+redis
+sqlalchemy
+psycopg2-binary
+playwright
+pyyaml
+anthropic
+pytest
+pytest-asyncio
+httpx
+rapidfuzz

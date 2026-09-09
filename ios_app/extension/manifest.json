@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "Artha Auto-Cart Companion",
+  "version": "1.0.0",
+  "description": "Chrome extension for automated multi-platform grocery cart execution across Zepto, Blinkit, and Swiggy Instamart.",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.zeptonow.com/*",
+    "https://*.blinkit.com/*",
+    "https://*.swiggy.com/*",
+    "http://localhost:3000/*",
+    "http://localhost:8000/*"
+  ],
+  "externally_connectable": {
+    "matches": [
+      "http://localhost:3000/*",
+      "http://localhost:8000/*"
+    ]
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Artha Auto-Cart Status"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost:3000/*"
+      ],
+      "js": ["web-bridge.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://*.zeptonow.com/*",
+        "https://*.blinkit.com/*",
+        "https://*.swiggy.com/*"
+      ],
+      "js": ["config.js", "content-runner.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

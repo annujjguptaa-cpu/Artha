@@ -1,0 +1,8 @@
+rules:
+  default_rating_threshold: 4.1
+  brand_lock_override: true
+  delivery_fee_split_threshold: 50
+  confidence_flag_threshold: 0.75
+  fallback_order: 
+    - "next_cheapest_platform"
+    - "next_cheapest_product_same_platform"

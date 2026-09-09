@@ -1,0 +1,13 @@
+name: GroceryApp
+options:
+  bundleIdPrefix: com.example
+targets:
+  GroceryApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources: [Sources]
+    info:
+      path: Info.plist
+      properties:
+        UILaunchScreen: {}

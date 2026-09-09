@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Optimizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Input Section -->
+        <section id="input-section" class="screen active">
+            <h1 class="main-title">Grocery List</h1>
+            <div class="input-card">
+                <textarea id="grocery-input" placeholder="Paste your grocery list here...&#10;e.g.&#10;2kg tomatoes&#10;Amul butter 500g&#10;1L milk"></textarea>
+            </div>
+            <button id="compare-btn" class="primary-btn" disabled>Compare Prices</button>
+        </section>
+
+        <!-- Loading Section -->
+        <section id="loading-section" class="screen">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+            </div>
+            <h2 id="loading-message">Optimizing your cart...</h2>
+            <p id="loading-submessage">Connecting to agent swarm...</p>
+        </section>
+
+        <!-- Error Section -->
+        <section id="error-section" class="screen">
+            <h2 class="error-title">Connection Failed</h2>
+            <p>We couldn't reach the optimization engine. Please check your connection and try again.</p>
+            <button id="retry-btn" class="primary-btn">Try Again</button>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="screen">
+            <div class="header-row">
+                <button id="back-btn" class="text-btn">❮ Back</button>
+                <h2>Your Optimized Carts</h2>
+                <div style="width: 50px;"></div>
+            </div>
+
+            <div class="hero-card">
+                <p class="hero-subtitle">OPTIMIZATION COMPLETE</p>
+                <div class="hero-price">
+                    <span class="currency">₹</span><span id="total-cost">0.00</span>
+                </div>
+                <div id="savings-badge" class="savings-badge">
+                    Saved ₹<span id="savings-amount">0.00</span> vs single platform
+                </div>
+            </div>
+
+            <div id="platform-cards-container"></div>
+            
+            <div id="needs-review-container" class="needs-review-card hidden">
+                <div class="review-header">
+                    <h3>⚠️ Needs Review</h3>
+                </div>
+                <div id="review-items"></div>
+            </div>
+
+            <button id="build-carts-btn" class="primary-btn">Build My Carts</button>
+        </section>
+
+        <!-- Summary Section -->
+        <section id="summary-section" class="screen">
+            <div class="success-icon">✓</div>
+            <h2>Carts Built Successfully</h2>
+            <p class="summary-desc">Your items are waiting for checkout in the native apps.</p>
+            
+            <div id="summary-cards-container"></div>
+
+            <button id="restart-btn" class="primary-btn">Start New List</button>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
