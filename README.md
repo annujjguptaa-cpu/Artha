@@ -21,59 +21,66 @@ Artha features a platform-agnostic, decoupled backend that powers two independen
 
 ```mermaid
 flowchart TD
-    subgraph Clients["📱 Client Layer"]
-        A1["Next.js Web Frontend\n(/web)"]
-        A2["SwiftUI iOS App\n(/ios-app)"]
-        EXT["Chrome Extension\n(/extension)"]
-        WK["WKWebView Engine\n(iOS Native)"]
+    subgraph Clients["Client Layer"]
+        A1["Next.js Web Frontend (/web)"]
+        A2["SwiftUI iOS App (/ios-app)"]
+        EXT["Chrome Extension (/extension)"]
+        WK["WKWebView Engine (iOS Native)"]
     end
 
-    subgraph Backend["⚡ FastAPI Backend Engine (/backend)"]
-        API["FastAPI Orchestrator\n(main.py & orchestrator.py)"]
-        LLM["Claude API\nList Parser"]
-        OPT["Deterministic Optimizer\n(optimizer.py)"]
-        POLICY["Policy Book Rules\n(policy_book.yaml)"]
+    subgraph Backend["FastAPI Backend Engine (/backend)"]
+        API["FastAPI Orchestrator (main.py & orchestrator.py)"]
+        LLM["Claude API List Parser"]
+        OPT["Deterministic Optimizer (optimizer.py)"]
+        POLICY["Policy Book Rules (policy_book.yaml)"]
     end
 
-    subgraph Workers["🤖 Agent Workers (/backend/agents)"]
-        Z_AGENT["Zepto Agent Worker\n(Playwright / Scraper)"]
-        B_AGENT["Blinkit Agent Worker\n(Playwright / Scraper)"]
-        I_AGENT["Instamart Agent Worker\n(Playwright / Scraper)"]
+    subgraph Workers["Agent Workers (/backend/agents)"]
+        Z_AGENT["Zepto Agent Worker"]
+        B_AGENT["Blinkit Agent Worker"]
+        I_AGENT["Instamart Agent Worker"]
     end
 
-    subgraph Data["💾 Persistence & Cache"]
+    subgraph Data["Persistence & Cache"]
         REDIS[("Redis Cache")]
         DB[("Postgres Database")]
     end
 
-    subgraph TargetStores["🛍️ Grocery Web Platforms"]
+    subgraph TargetStores["Grocery Web Platforms"]
         ZEPTO["Zepto Web Store"]
         BLINKIT["Blinkit Web Store"]
         INSTAMART["Swiggy Instamart"]
     end
 
-    %% Flow connections
-    A1 -- "POST /parse-list & /compare" --> API
-    A2 -- "POST /parse-list & /compare" --> API
-    API -- "Parse raw text" --> LLM
-    API -- "Cache Check / Set" --> REDIS
-    API -- "Store Lists & Results" --> DB
-    API -- "Parallel Scrape Tasks" --> Z_AGENT & B_AGENT & I_AGENT
+    A1 -->|POST /parse-list & /compare| API
+    A2 -->|POST /parse-list & /compare| API
+    API -->|Parse raw text| LLM
+    API -->|Cache Check / Set| REDIS
+    API -->|Store Lists & Results| DB
+    API -->|Parallel Scrape| Z_AGENT
+    API -->|Parallel Scrape| B_AGENT
+    API -->|Parallel Scrape| I_AGENT
     
-    Z_AGENT -- "Scrape Prices" --> ZEPTO
-    B_AGENT -- "Scrape Prices" --> BLINKIT
-    I_AGENT -- "Scrape Prices" --> INSTAMART
+    Z_AGENT -->|Scrape Prices| ZEPTO
+    B_AGENT -->|Scrape Prices| BLINKIT
+    I_AGENT -->|Scrape Prices| INSTAMART
     
-    Z_AGENT & B_AGENT & I_AGENT -- "Raw Worker Results" --> OPT
-    POLICY -- "Rules & Thresholds" --> OPT
-    OPT -- "Optimization Result" --> API
-    API -- "WebSocket / Polling Progress" --> A1 & A2
+    Z_AGENT -->|Worker Results| OPT
+    B_AGENT -->|Worker Results| OPT
+    I_AGENT -->|Worker Results| OPT
+    POLICY -->|Rules & Thresholds| OPT
+    OPT -->|Optimization Result| API
+    API -->|WebSocket / Polling Progress| A1
+    API -->|WebSocket / Polling Progress| A2
 
-    %% Execution flow
-    A1 -- "Build My Carts (postMessage)" --> EXT
-    EXT -- "Automated Cart Fill" --> ZEPTO & BLINKIT & INSTAMART
-    A2 -- "Execute Cart Scripts" --> WK
-    WK -- "Automated Cart Fill" --> ZEPTO & BLINKIT & INSTAMART
+    A1 -->|Build My Carts| EXT
+    EXT -->|Automated Cart Fill| ZEPTO
+    EXT -->|Automated Cart Fill| BLINKIT
+    EXT -->|Automated Cart Fill| INSTAMART
+    A2 -->|Execute Cart Scripts| WK
+    WK -->|Automated Cart Fill| ZEPTO
+    WK -->|Automated Cart Fill| BLINKIT
+    WK -->|Automated Cart Fill| INSTAMART
 ```
 
 ---
@@ -84,13 +91,13 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor User
-    participant Web as Next.js Web / iOS App
+    participant Web as Web & iOS Client
     participant API as FastAPI Backend
     participant LLM as Claude API Parser
     participant Worker as Parallel Scrapers
     participant OPT as Optimizer Engine
-    participant Ext as Chrome Ext / WKWebView
-    participant Store as Zepto / Blinkit / Instamart
+    participant Ext as Chrome Ext & WKWebView
+    participant Store as Grocery Stores
 
     User->>Web: Paste Raw Grocery List
     Web->>API: POST /parse-list {raw_text}
@@ -114,7 +121,7 @@ sequenceDiagram
     OPT-->>API: Return Split-Cart vs Single Store Results
     API-->>Web: Final OptimizationResult JSON
     
-    Web->>User: Display Savings Highlight (₹Saved), Cards & Overrides
+    Web->>User: Display Savings Highlight (Saved Amount), Cards & Overrides
     
     User->>Web: Click "Build My Carts"
     Web->>Ext: Dispatch Cart Execution Payload
