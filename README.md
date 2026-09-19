@@ -88,7 +88,7 @@ sequenceDiagram
     participant API as FastAPI Backend
     participant LLM as Claude API Parser
     participant Worker as Parallel Scrapers
-    participant Opt as Optimizer Engine
+    participant OPT as Optimizer Engine
     participant Ext as Chrome Ext / WKWebView
     participant Store as Zepto / Blinkit / Instamart
 
@@ -110,8 +110,8 @@ sequenceDiagram
     Worker-->>API: Scraped Prices, Stock & Ratings
     API-->>Web: WS Broadcast Progress (25% -> 50% -> 100%)
     
-    API->>Opt: Evaluate Prices, Ratings & Policy Rules
-    Opt-->>API: Return Split-Cart vs Single Store Results
+    API->>OPT: Evaluate Prices, Ratings & Policy Rules
+    OPT-->>API: Return Split-Cart vs Single Store Results
     API-->>Web: Final OptimizationResult JSON
     
     Web->>User: Display Savings Highlight (₹Saved), Cards & Overrides
@@ -257,7 +257,7 @@ Open `http://localhost:3000` in your browser.
 - **Web Frontend**: Deployed to **Vercel** setting the root directory to `web` and configuring `NEXT_PUBLIC_API_URL`.
 - **Chrome Extension**: Unpacked load via Chrome Developer Mode or packaged for Chrome Web Store.
 
-For comprehensive deployment commands, see [DEPLOY.md](file:///c:/Users/ASUS/Downloads/Artha/ios_app/DEPLOY.md).
+For comprehensive deployment commands, see [DEPLOY.md](DEPLOY.md).
 
 ---
 
