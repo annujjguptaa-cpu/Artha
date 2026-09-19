@@ -31,7 +31,7 @@ flowchart TD
     subgraph Backend["FastAPI Backend Engine (/backend)"]
         API["FastAPI Orchestrator (main.py & orchestrator.py)"]
         LLM["Claude API List Parser"]
-        OPT["Deterministic Optimizer (optimizer.py)"]
+        ENGINE["Deterministic Optimizer (optimizer.py)"]
         POLICY["Policy Book Rules (policy_book.yaml)"]
     end
 
@@ -65,11 +65,11 @@ flowchart TD
     B_AGENT -->|Scrape Prices| BLINKIT
     I_AGENT -->|Scrape Prices| INSTAMART
     
-    Z_AGENT -->|Worker Results| OPT
-    B_AGENT -->|Worker Results| OPT
-    I_AGENT -->|Worker Results| OPT
-    POLICY -->|Rules & Thresholds| OPT
-    OPT -->|Optimization Result| API
+    Z_AGENT -->|Worker Results| ENGINE
+    B_AGENT -->|Worker Results| ENGINE
+    I_AGENT -->|Worker Results| ENGINE
+    POLICY -->|Rules & Thresholds| ENGINE
+    ENGINE -->|Optimization Result| API
     API -->|WebSocket / Polling Progress| A1
     API -->|WebSocket / Polling Progress| A2
 
@@ -95,7 +95,7 @@ sequenceDiagram
     participant API as FastAPI Backend
     participant LLM as Claude API Parser
     participant Worker as Parallel Scrapers
-    participant OPT as Optimizer Engine
+    participant ENGINE as Optimizer Engine
     participant Ext as Chrome Ext & WKWebView
     participant Store as Grocery Stores
 
@@ -117,8 +117,8 @@ sequenceDiagram
     Worker-->>API: Scraped Prices, Stock & Ratings
     API-->>Web: WS Broadcast Progress (25% -> 50% -> 100%)
     
-    API->>OPT: Evaluate Prices, Ratings & Policy Rules
-    OPT-->>API: Return Split-Cart vs Single Store Results
+    API->>ENGINE: Evaluate Prices, Ratings & Policy Rules
+    ENGINE-->>API: Return Split-Cart vs Single Store Results
     API-->>Web: Final OptimizationResult JSON
     
     Web->>User: Display Savings Highlight (Saved Amount), Cards & Overrides
